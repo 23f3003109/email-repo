@@ -1,0 +1,15 @@
+name: Simple Email Step Workflow
+
+on:
+  workflow_dispatch:  # lets you run this manually
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 23f3003109@ds.study.iitm.ac.in
+        run: echo "Hello from GitHub Actions!"
