@@ -1,0 +1,33 @@
+name: CI with Cache
+
+on: [push]  # Runs on every push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Prime cache  # Your required step name
+      uses: actions/cache@v4
+      id: cache-step
+      with:
+        key: cache-e41ae91  # Exact key required
+        path: ~/.npm  # Cache npm global cache (common example)
+        
+    - name: Show cache result
+      run: echo "Cache hit: ${{ steps.cache-step.outputs.cache-hit }}"
+      
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'  # Optional: auto-caches for demo
+        
+    - name: Install deps
+      run: npm ci  # Or npm install; creates package-lock.json if needed
+      
+    - name: Test
+      run: npm test  # Skip if no tests; just demo
