@@ -1,0 +1,26 @@
+name: Cache Demo
+
+on: [push]
+
+jobs:
+  demo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: prime-cache-e41ae91  # Required step name
+        id: cache-step
+        uses: actions/cache@v4     # Required: v4 or newer
+        with:
+          path: node_modules       # Cache this folder (dependencies)
+          key: cache-e41ae91       # Exact key required
+          restore-keys: |
+            cache-e41ae91-
+      
+      - name: Install dependencies  # This benefits from cache
+        if: steps.cache-step.outputs.cache-hit != 'true'
+        run: npm ci  # Or npm install; creates node_modules if miss
+      
+      - name: Show cache result
+        run: echo "Cache hit: ${{ steps.cache-step.outputs.cache-hit }}"
