@@ -1,0 +1,27 @@
+name: 'Daily Update by 23f3003109@ds.study.iitm.ac.in'
+
+on:
+  schedule:
+    - cron: '0 12 * * *'  # Runs daily at 12:00 UTC (5:30 PM IST—pick any specific time, not wildcards)
+  workflow_dispatch:      # Lets you test manually
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update timestamp by 23f3003109@ds.study.iitm.ac.in
+        run: |
+          echo "$(date -u)" > last-update.txt  # Creates/updates a simple text file with current time
+
+      - name: Commit changes
+        run: |
+          git config user.name "Daily Bot"
+          git config user.email "23f3003109@ds.study.iitm.ac.in"
+          git add last-update.txt
+          git commit -m "Daily automated update: $(date -u)" || exit 0
+          git push
